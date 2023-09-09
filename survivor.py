@@ -1,11 +1,13 @@
 
 from dataclasses import dataclass, field
-# from location import find_location_by_name
+from location import Location
+from items import Food
 # from weapon import Weapon, hands
 
 @dataclass
 class Survivor:
     name: str
+    location: Location = None
     # order: list = field(default_factory=lambda: ['rest'])
     #health: int = 100
     # weapon: Weapon = hands
@@ -17,8 +19,11 @@ class Survivor:
     # experienceByWeapon: int = 10
     # status: str = 'Resting...'
 
-    def build_defense(self):
-        return self.skills["build"]
+    
+    def search(self):
+        if self.location:
+            return self.location.search()
+        return None
 
 #     def attack(self, person):
 #         print(f"{self.name} attacked {person.name}")

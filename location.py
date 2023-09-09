@@ -1,33 +1,16 @@
-from dataclasses import dataclass
-from weapon import Weapon, weapons
+from dataclasses import dataclass, field
+#from weapon import Weapon, weapons
 import random
+from items import Food
 
 
 @dataclass
 class Location:
     name: str
-    items: list[Weapon]
-     
+    items: list[Food] = field(default_factory=list)
+       
     def search(self):
-        random.shuffle(self.items)
-        return self.items.pop()
-
-
-
-itemsHospital = random.choices(weapons,k=2)
-
-locations = [Location('hospital', itemsHospital)]
-
-def find_location_by_name(location_name):
-    return [location for location in locations if location.name.lower() == location_name.lower()][0]
-
-
-@dataclass
-class Community:
-    survivors: list
-    zombies: list
-    food: list
-
-    def pass_night(self):
-        for survivor in self.survivors:
-            survivor.eat(self.food)
+        chance = random.randint(1,10)
+        if chance > 8:
+            return random.choices(self.items, weights=[item.probability for item in self.items])[0]
+        return None

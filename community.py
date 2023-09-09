@@ -11,6 +11,12 @@ class Community:
     def build_defense(self, amount:int):
         self.defense += amount
 
+    def add_food(self, amount:int):
+        self.food += amount
+
+    def eat_food(self, amount:int):
+        self.food -= amount
+
     def status(self):
         return {"defense":self.defense,
                 "food":self.food}

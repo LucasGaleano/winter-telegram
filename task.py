@@ -3,7 +3,7 @@ from enum import Enum
 import time
 from datetime import datetime
 
-TIME_ACTION = 10 #sec
+TIME_ACTION = 30 #sec
 
 
 @dataclass
@@ -11,18 +11,21 @@ class TaskType():
     name: str
     description: str
     turns_required: int = 1
+    location: str = None
 
     def json(self):
         return {
             "name" : self.name,
             "description":self.description,
-            "turns_required": self.turns_required
+            "turns_required": self.turns_required,
+            "location": self.location
         }
 
 
 class Task(Enum):
     BUILD_BARRICADE = TaskType(name="build", description="building a barricade")
-    TRAVEL = TaskType(name="travel", description="travelling to")
+    TRAVELHOSPITAL = TaskType(name="travel", description="travelling to the hospital", location="hospital")
+    SEARCH = TaskType(name="search", description="searching")
 
 class Status(Enum):
     FINISH = 'finish'
@@ -45,8 +48,10 @@ class CurrentTask:
 
     def time_remaind(self):
         # example'0:29:59.99999'
-        timeRemaind = str(datetime.fromtimestamp(self.time_end) - datetime.now())
-        return timeRemaind.split('.')[0]
+        timeRemaind = datetime.fromtimestamp(self.time_end) - datetime.now()
+        if timeRemaind.days < 0:
+            return "finished" 
+        return str(timeRemaind).split('.')[0]
 
     def is_finish(self):
         return time.time() > self.time_end

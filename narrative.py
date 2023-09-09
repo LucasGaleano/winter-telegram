@@ -16,7 +16,7 @@ class Narrative():
 
         return random.choice(events)
     
-    def finish_barricade(self, person):
+    def finished_barricade(self, person):
         events = [
             f"As the snowstorm rages outside, {person}, one of the survivors takes charge, constructing a makeshift barricade at your shelter. The sense of security is palpable.\nCommunity gain +1 defense.",
             f"With determination and teamwork, a survivor successfully completes a sturdy barricade around your camp. The group breathes a sigh of relief, feeling safer than ever.\nCommunity gain +1 defense."
@@ -27,6 +27,13 @@ class Narrative():
     def new_arrived(self, person):
         events = [
             f"Amidst the cold and desolation, a stranger appears on the horizon. After cautious introductions, they express a desire to join your community.\n{person} join the community"
+        ]
+
+        return random.choice(events)
+    
+    def found_food(self, person:str, amount:int):
+        events = [
+            f"{person} stumbles upon a hidden cache of food. Their discovery provides a much-needed boost to the community's supplies.\nCommunity gain +{amount} of food"
         ]
 
         return random.choice(events)
