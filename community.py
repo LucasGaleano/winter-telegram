@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 class Community:
     food: int = 0
     defense: int = 0
+    emoji: str= '\U0001F3DA'
     #survivors: list = field(default_factory=list)
     #zombies: list = field(default_factory=list)
 

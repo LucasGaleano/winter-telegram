@@ -24,6 +24,9 @@ class Survivor:
         if self.location:
             return self.location.search()
         return None
+    
+    def show_location(self):
+        return f"{self.location.emoji} - {self.name} at the {self.location.name}"
 
 #     def attack(self, person):
 #         print(f"{self.name} attacked {person.name}")

@@ -10,22 +10,27 @@ TIME_ACTION = 30 #sec
 class TaskType():
     name: str
     description: str
-    turns_required: int = 1
+    turns_required: float = 1
     location: str = None
+    passive: bool = False
+
+    def __eq__(self, other: object) -> bool:
+        return self.name == other.name
 
     def json(self):
         return {
             "name" : self.name,
             "description":self.description,
             "turns_required": self.turns_required,
-            "location": self.location
+            "location": self.location,
+            "passive": self.passive
         }
 
 
 class Task(Enum):
     BUILD_BARRICADE = TaskType(name="build", description="building a barricade")
-    TRAVELHOSPITAL = TaskType(name="travel", description="travelling to the hospital", location="hospital")
-    SEARCH = TaskType(name="search", description="searching")
+    TRAVEL = TaskType(name="travel", description="travelling")
+    SEARCH = TaskType(name="search", description="seeking supplies", passive=True)
 
 class Status(Enum):
     FINISH = 'finish'
@@ -43,7 +48,7 @@ class CurrentTask:
     def __init__(self, owner:str, type:TaskType):
         self.owner = owner
         self.type = type
-        self.time_end = time.time() + TIME_ACTION + type.turns_required
+        self.time_end = time.time() + TIME_ACTION * type.turns_required
         self.time_start = time.time()
 
     def time_remaind(self):
