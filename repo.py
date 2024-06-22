@@ -31,11 +31,10 @@ class Repo:
     def get_all_task(self, filter=None):
         tasks = []
         for data in self.collections['task'].find(filter):
-            fetchedType = TaskType(name=data['type']['name'], description=data['type']['description'], turns_required=data['type']['turns_required'], location=data['type']['location'], passive=data['type']['passive'])
-            fetchedTask = CurrentTask(owner=data['owner'], type=fetchedType)
-            fetchedTask.status = data['status']
-            fetchedTask.time_end = data['time_end']
-            fetchedTask.time_start = data['time_start']
+            fetchedType = TaskType(**data['type'])
+            data.pop('type')
+            data.pop('_id')
+            fetchedTask = CurrentTask(**data, type=fetchedType)
             tasks.append(fetchedTask)
         return tasks
     

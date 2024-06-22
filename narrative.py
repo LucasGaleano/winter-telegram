@@ -16,9 +16,9 @@ class Narrative():
                 f"With determination in his heart, {person} makes the brave choice to journey towards the {location}, seeking potential aid."
             ]
         if self.lang == 'es':
-            events = [f'{person} llega a el {location} en busca de recursos, esperando encontrar lo necesario para mantenerse con vida en este mundo invernal lleno de peligros.',
+            events = [f'{person} se encamina hacia el {location} en busca de recursos, esperando encontrar lo necesario para mantenerse con vida en este mundo invernal lleno de peligros.',
                     f'Con determinación, {person} se aventura en el {location} en busca de recursos para el grupo. El frío mordiente y el temor a los zombies son su compañía mientras se adentra en lo desconocido, con la esperanza de encontrar lo que tanto necesitan.',
-                    f"{person} llega hasta su destino, decidido a encontrar recursos vitales para la supervivencia del grupo en el {location}.",
+                    f"{person} se dirige a su destino, decidido a encontrar recursos vitales para la supervivencia del grupo en el {location}.",
                     f"Mientras el invierno se hace más implacable, {person} toma la valiente decisión de explorar el {location} en busca de recursos que mantendrán a todos con vida.",
                     f"{person} se aventura en territorio desconocido, enfrentando los desafíos del invierno en su búsqueda por recursos vitales en el {location}.",
                     f"La esperanza lleva a {person} a explorar el {location}, esperando encontrar los recursos necesarios para mantener a raya a los zombies y sobrevivir al invierno."]

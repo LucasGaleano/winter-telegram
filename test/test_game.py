@@ -1,5 +1,6 @@
 from community import Community
 from game import Game, locations
+from location import Location
 from survivor import Survivor
 from narrative import Narrative
 from items import Food
@@ -33,6 +34,18 @@ def test_location_search():
     s.location = locations["hospital"]
     item = s.search()
     assert (type(item) == Food or type(item) == type(None))
+    assert isinstance(g.task_searched('john'), str) == True
+
+def test_game_explore():
+    g = Game(Community(), Narrative())
+    assert g.survivors == []
+    s = Survivor('john')
+    g.add_survivor(s)
+    newLocation = g.finding_place()
+    assert (newLocation == None or isinstance(newLocation, Location) )
+    assert isinstance(g.task_explored('john'), str) == True
+
+ 
 
 def test_repository():
     repo = Repo('winter-test','mongodb://localhost')
