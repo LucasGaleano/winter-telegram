@@ -1,16 +1,41 @@
 
 from dataclasses import dataclass, field
 from location import Location
-from items import Food
-# from weapon import Weapon, hands
+from items import Food, Weapon
 
 @dataclass
-class Survivor:
+class Person:
+    name: str
+    health: int = 10
+    weapon: Weapon = field(default_factory=lambda: Weapon(name="hands", level=5))
+
+    def attack(self, enemy):
+        damage = self.weapon.damage()
+        enemy.attacked(damage)
+        return f"{self.name} do {damage} damage to {enemy.name}"
+        # self.weaponExperience[self.weapon.type] = self.weaponExperience.setdefault(self.weapon.type,0) + self.experienceByWeapon
+
+    def attacked(self, damage):
+        self.loss_health(damage)
+
+    def loss_health(self, damage):
+        self.health = max(0, self.health - damage)
+
+    def is_death(self):
+        return self.health == 0
+
+    def is_ok(self):
+        return not self.is_death()
+
+
+
+
+@dataclass
+class Survivor(Person):
     name: str
     location: Location = None
     # order: list = field(default_factory=lambda: ['rest'])
-    #health: int = 100
-    # weapon: Weapon = hands
+    weapon: Weapon = field(default_factory=lambda: Weapon(name="hands", level=5))
     #level: int =  1
     #experience: int = 0
     #skills: dict = field(default_factory=dict)
@@ -28,18 +53,7 @@ class Survivor:
     def show_location(self):
         return f"{self.location.emoji} - {self.name} at the {self.location.name}"
 
-#     def attack(self, person):
-#         print(f"{self.name} attacked {person.name}")
-#         damage = self.weapon.damage
-#         person.attacked(damage)
-#         # self.weaponExperience[self.weapon.type] = self.weaponExperience.setdefault(self.weapon.type,0) + self.experienceByWeapon
 
-#     def attacked(self, damage):
-#         self.loss_health(damage)
-
-#     def loss_health(self, damage):
-#         self.health = max(0, self.health - damage)
-#         print(f"{self.name} losses {damage} of health")
 
 #     def search(self, location):
 #         item = location.search()

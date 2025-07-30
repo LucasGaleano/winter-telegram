@@ -3,7 +3,7 @@ from enum import Enum
 import time
 from datetime import datetime
 
-TIME_ACTION = 30 #sec
+TIME_ACTION = 10 #sec
 
 
 @dataclass
@@ -63,10 +63,10 @@ class CurrentTask:
 
     def time_remaind(self):
         # example'0:29:59.99999'
-        timeRemaind = datetime.fromtimestamp(self.time_end) - datetime.now()
-        if timeRemaind.days < 0:
+        timeleft = datetime.fromtimestamp(self.time_end) - datetime.now()
+        if timeleft.days < 0:
             return "finished" 
-        return str(timeRemaind).split('.')[0]
+        return str(timeleft).split('.')[0]
 
     def is_finish(self):
         return time.time() > self.time_end

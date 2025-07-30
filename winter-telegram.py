@@ -55,14 +55,25 @@ async def travel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await check_new_survivor(update, context)
     if has_active_task(get_owner(update)):
         await send_message(context, text=f"You are currently engaged in a task.")
-        return None    
+        return None
     await stop_passive_task(update, context)
     #print(update.message.text) # /travellocation
     location = update.message.text.split('/travel')[1]
 
+    #TODO agregar probabilidad segun zombies en las afueras de la comunidad
+    
+    if game.dice_more_than(3):
+        survivorName = get_owner(update)
+        survivor = game.find_survivor_by_name(survivorName)
+        #TODO hacer zombies nivel segun tiempo de juego
+        battleLog = game.battle(survivors=[survivor],zombies=[Zombie(level=5)])
+        await send_message(context, text=battleLog)
+
     taskTypeTravel = copy.copy(Task.TRAVEL.value)
     taskTypeTravel.description = f"travelling to the {location}"
     taskTypeTravel.location = location
+
+
     add_task(owner=get_owner(update), type=taskTypeTravel)
     await send_message(context, text=story.travelling(location, get_owner(update)))
 
@@ -70,10 +81,20 @@ async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await check_new_survivor(update, context)
     message = game.show_status_community()
     message += "\n\n"
-    for survivor in game.survivors:
-        if survivor.location:
-            message += survivor.show_location()
-            message += '\n'
+    if game.locationsFound:
+        message += "locations:\n"
+        for location in game.locationsFound.values():
+            message += f'{location.emoji} {location.name} - '
+            for survivor in game.survivors:
+                if survivor.location == location:
+                    message += survivor.name
+
+
+    # for survivor in game.survivors:
+    #     if survivor.location:
+    #         message += survivor.show_location()
+    #         message += '\n'
+
     message += "\n\n"
     message += f"Tasks:\n"
     tasks = repo.get_all_progress_task()
@@ -102,8 +123,8 @@ async def check_tasks(context: ContextTypes.DEFAULT_TYPE):
         if not has_task(s.name) and s.location != None:
             add_task(owner=s.name, type=Task.SEARCH.value)
 
-
     if gameChangesMessage:
+        print('game message: ', gameChangesMessage)
         await send_message(context, text=gameChangesMessage)
 
 async def check_new_survivor(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -129,7 +150,7 @@ def add_task(owner:str, type=TaskType):
 
 async def send_message(context: ContextTypes.DEFAULT_TYPE, text: str, update: Update = None, ):
     #escaping characters for markdown.
-    text = text.replace('.','\.').replace('[','\[').replace(']','\]').replace('+','\+').replace('-','\-')
+    text = text.replace('.',r'\.').replace('[',r'\[').replace(']',r'\]').replace('+',r'\+').replace('-',r'\-')
     await context.bot.send_message(chat_id=context._chat_id, text=text, parse_mode=constants.ParseMode.MARKDOWN_V2)
 
 async def add_command(context: ContextTypes.DEFAULT_TYPE, command: str, description: str, callback):
@@ -143,12 +164,12 @@ async def add_command(context: ContextTypes.DEFAULT_TYPE, command: str, descript
 if __name__ == '__main__':
     config = configparser.ConfigParser()
     config.read('winter.conf')
-    application = ApplicationBuilder().token(config['auth']['token']).build()
+    application = ApplicationBuilder().token(config['auth']['token']).read_timeout(10).connect_timeout(5).build()
     application.add_handler(CommandHandler('start', start))
     application.add_handler(CommandHandler('barricade', barricade))
     application.add_handler(CommandHandler('status', status))
     application.add_handler(CommandHandler('explore', explore))
-    # application.add_handler(CommandHandler('travelhospital', travel))
+    application.add_handler(CommandHandler('travelhospital', travel))
     print('start')
 
     application.run_polling()

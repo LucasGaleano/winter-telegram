@@ -5,7 +5,7 @@ from task import Task, TaskType, Status, CurrentTask
 
 
 
-# docker run -d --rm -p 127.0.0.1:27017:27017 --network vuln-network -v mongodb-vuln:/data/db --name mongo mongo:4.4.23
+# docker run -d --rm -p 127.0.0.1:27017:27017 --network winter-network -v mongodb-vuln:/data/db --name mongo mongo:4.4.23
 # docker run -d --rm -p 127.0.0.1:27017:27017 --name mongo mongo
 
 @dataclass
